@@ -27,6 +27,7 @@ from confluent_kafka import DeserializingConsumer
 from confluent_kafka.schema_registry import SchemaRegistryClient
 from confluent_kafka.schema_registry.avro import AvroDeserializer
 from confluent_kafka.serialization import StringDeserializer
+from confluent_kafka.error import ValueDeserializationError
 
 import json
 import ccloud_lib
@@ -49,7 +50,7 @@ if __name__ == '__main__':
                                               # from_dict=ccloud_lib.Name.dict_to_name)
                                               from_dict=None)
     count_avro_deserializer = AvroDeserializer(schema_registry_client, 
-                                              # from_dict=ccloud_lib.Count.dict_to_count)
+                                              # schema_str=ccloud_lib.count_schema,
                                               from_dict=None)
 
     # for full list of configurations, see:
@@ -85,7 +86,7 @@ if __name__ == '__main__':
                 print(f"Consumed record, key: {name_object}, value: {value_object}")
         except KeyboardInterrupt:
             break
-        except SerializerError as e:
+        except ValueDeserializationError as e:
             # Report malformed record, discard results, continue polling
             print("Message deserialization failed {}".format(e))
             pass
