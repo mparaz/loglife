@@ -1,0 +1,37 @@
+{
+  "namespace": "com.mparaz.loglife",
+  "type": "record",
+  "name": "Transaction",
+  "fields": [
+    {
+      "name": "uuid",
+      "type": "string",
+      "doc": "The tansaction uuid"
+    },
+    {
+      "name": "address",
+      "type": "string",
+      "doc": "The address"
+    },
+    {
+      "name": "amount",
+      "type": {
+        "type": "bytes",
+        "logicalType": "decimal",
+        "precision": 9,
+        "scale": 2
+      }
+    },
+    {
+      "name": "type",
+      "type": {
+        "type": "enum",
+        "name": "TransactionType",
+        "symbols": [
+          "TRANSFER",
+          "REFINANCE"
+        ]
+      }
+    }
+  ]
+}
