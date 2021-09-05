@@ -27,14 +27,16 @@ public class GlueTransactionProducer {
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
 
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, GlueSchemaRegistryKafkaSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, GlueSchemaRegistryKafkaSerializer.class.getName());
         props.put(AWSSchemaRegistryConstants.DATA_FORMAT, DataFormat.AVRO.name());
         props.put(AWSSchemaRegistryConstants.AWS_REGION, "ap-southeast-2");
         props.put(AWSSchemaRegistryConstants.REGISTRY_NAME, "my-registry");
 
         // Schemas are explicitly named and not derived from the topic.
-        props.put(AWSSchemaRegistryConstants.SCHEMA_NAME, "transaction");
+//        props.put(AWSSchemaRegistryConstants.SCHEMA_NAME, "transaction");
+        props.put(AWSSchemaRegistryConstants.SCHEMA_NAMING_GENERATION_CLASS,
+                "com.mparaz.loglife.CustomerProvidedSchemaNamingStrategy");
 
         String uuidString = UUID.randomUUID().toString();
         Faker faker = new Faker();
@@ -45,9 +47,9 @@ public class GlueTransactionProducer {
 
         Transaction transaction = new Transaction(uuidString, addressString, amount, TransactionType.REFINANCE);
 
-        try (Producer<String, Transaction> producer = new KafkaProducer<>(props)) {
+        try (Producer<Address, Transaction> producer = new KafkaProducer<>(props)) {
             // Oversimplifying - the property is identified uniquely by the address.
-            ProducerRecord<String, Transaction> producerRecord = new ProducerRecord<>(topic, addressString, transaction);
+            ProducerRecord<Address, Transaction> producerRecord = new ProducerRecord<>(topic, address, transaction);
             producer.send(producerRecord);
         }
     }

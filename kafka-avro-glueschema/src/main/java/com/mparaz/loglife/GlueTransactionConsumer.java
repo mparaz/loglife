@@ -35,7 +35,7 @@ public class GlueTransactionConsumer {
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
 
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, GlueSchemaRegistryKafkaDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, GlueSchemaRegistryKafkaDeserializer.class
                 .getName());
         props.put(AWSSchemaRegistryConstants.AWS_REGION, "ap-southeast-2");
@@ -47,14 +47,14 @@ public class GlueTransactionConsumer {
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
 
         // It looks like Glue can only deal with Avro GenericRecord?
-        KafkaConsumer<String, Transaction> consumer = new KafkaConsumer<>(props);
+        KafkaConsumer<Address, Transaction> consumer = new KafkaConsumer<>(props);
 
         consumer.subscribe(List.of(topic));
 
         while (true) {
-            ConsumerRecords<String, Transaction> records = consumer.poll(Duration.ofMillis(1000));
-            for (ConsumerRecord<String, Transaction> record : records) {
-                log.info("Consumed: {}", record.value().toString());
+            ConsumerRecords<Address, Transaction> records = consumer.poll(Duration.ofMillis(1000));
+            for (ConsumerRecord<Address, Transaction> record : records) {
+                log.info("Consumed: key:{}, value: {}", record.key().toString(), record.value().toString());
             }
         }
     }
