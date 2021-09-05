@@ -1,0 +1,12 @@
+{
+  "namespace": "com.mparaz.loglife",
+  "type": "record",
+  "name": "Address",
+  "fields": [
+    {
+      "name": "address",
+      "type": "string",
+      "doc": "The address"
+    }
+  ]
+}
