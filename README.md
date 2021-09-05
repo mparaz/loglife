@@ -1,0 +1,1 @@
+Log Life sample code.

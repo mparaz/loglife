@@ -19,25 +19,26 @@ public class TransactionProducer {
     final static Logger log = LoggerFactory.getLogger(TransactionProducer.class);
 
     public static void main(String[] args) {
+        String topic = args[0];
 
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
-        // The key serializer needs to be explicitly specified.
-        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("key.serializer", "io.confluent.kafka.serializers.KafkaAvroSerializer");
         props.put("value.serializer", "io.confluent.kafka.serializers.KafkaAvroSerializer");
         props.put("schema.registry.url", "http://localhost:8081");
 
         String uuidString = UUID.randomUUID().toString();
         Faker faker = new Faker();
-        String address = faker.address().streetAddress();
+        String addressString = faker.address().streetAddress();
+        Address address = new Address(addressString);
         Random random = new Random();
         BigDecimal amount = new BigDecimal(random.nextInt(1000000) + 400000);
 
-        Transaction transaction = new Transaction(uuidString, address, amount, TransactionType.REFINANCE);
+        Transaction transaction = new Transaction(uuidString, addressString, amount, TransactionType.REFINANCE);
 
-        try (Producer<String, Transaction> producer = new KafkaProducer<>(props)) {
+        try (Producer<Address, Transaction> producer = new KafkaProducer<>(props)) {
             // Oversimplifying - the property is identified uniquely by the address.
-            ProducerRecord<String, Transaction> producerRecord = new ProducerRecord<>("transactionlog", address, transaction);
+            ProducerRecord<Address, Transaction> producerRecord = new ProducerRecord<>(topic, address, transaction);
             producer.send(producerRecord);
         }
     }

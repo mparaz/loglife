@@ -75,6 +75,7 @@
                     <stringType>String</stringType>
 		    <enableDecimalLogicalType>true</enableDecimalLogicalType>
                     <imports>
+                        <import>${project.basedir}/src/main/avro/address.avsc</import>
                         <import>${project.basedir}/src/main/avro/transaction.avsc</import>
                     </imports>
                     <includes>
