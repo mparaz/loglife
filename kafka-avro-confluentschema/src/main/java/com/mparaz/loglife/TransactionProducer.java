@@ -45,7 +45,10 @@ public class TransactionProducer {
             // Another option is to use a callback.
             try {
                 RecordMetadata recordMetadata = producer.send(producerRecord).get();
-                System.out.println("Produced: partition: " + recordMetadata.partition() + ", offset: " + recordMetadata.offset() + ", value: " + transaction);
+                System.out.println("Produced: partition: " + recordMetadata.partition() +
+                        ", offset: " + recordMetadata.offset() +
+                        ", timestamp: " + recordMetadata.timestamp() +
+                        ", value: " + transaction);
             } catch (InterruptedException | ExecutionException e) {
                 // Future is interrupted, or Kafka client underlying exception
                 e.printStackTrace();

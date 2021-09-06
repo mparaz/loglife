@@ -51,7 +51,10 @@ public class BrokenTransactionConsumer {
             ConsumerRecords<Address, Transaction> records = consumer.poll(Duration.ofMillis(1000));
 
             for (ConsumerRecord<Address, Transaction> record : records) {
-                System.out.println("Consumed: partition: " + record.partition() + ", " + record.offset() +  ", value: " + record.value());
+                System.out.println("Consumed: partition: " + record.partition() +
+                        ", offset: " + record.offset() +
+                        ", timestamp: " + record.timestamp() +
+                        ",  value: " + record.value());
             }
 
             // Manual commit. But, we fail.
