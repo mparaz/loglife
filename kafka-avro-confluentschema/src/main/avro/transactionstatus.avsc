@@ -1,0 +1,17 @@
+{
+  "namespace": "com.mparaz.loglife",
+  "type": "record",
+  "name": "TransactionStatus",
+  "fields": [
+    {
+      "name": "uuid",
+      "type": "string",
+      "doc": "The transaction uuid"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "doc": "What happened"
+    }
+  ]
+}

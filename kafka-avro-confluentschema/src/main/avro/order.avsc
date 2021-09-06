@@ -1,0 +1,34 @@
+{
+  "namespace": "com.mparaz.loglife",
+  "type": "record",
+  "name": "Order",
+  "fields": [
+    {
+      "name": "uuid",
+      "type": "string",
+      "doc": "The order uuid"
+    },
+    {
+      "name": "address",
+      "type": "string",
+      "doc": "The address"
+    },
+    {
+      "name": "customerid",
+      "type": "string",
+      "doc": "The customer ID"
+    },
+    {
+      "name": "type",
+      "type": {
+        "type": "enum",
+        "name": "OrderSize",
+        "symbols": [
+          "APARTMENT",
+          "HOUSE",
+          "MANSION"
+        ]
+      }
+    }
+  ]
+}

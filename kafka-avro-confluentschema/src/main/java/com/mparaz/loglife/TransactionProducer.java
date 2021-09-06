@@ -1,12 +1,15 @@
 package com.mparaz.loglife;
 
 import com.github.javafaker.Faker;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;

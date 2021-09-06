@@ -16,7 +16,7 @@ import java.util.Properties;
  */
 public class BrokenTransactionConsumer {
 
-    public static void main(String[] args) {
+    public static void   main(String[] args) {
         String topic = args[0];
 
         Properties props = new Properties();
