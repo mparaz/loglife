@@ -17,8 +17,6 @@ import java.util.Properties;
  */
 public class GenericRecordConsumer {
 
-    final static Logger log = LoggerFactory.getLogger(GenericRecordConsumer.class);
-
     public static void main(String[] args) {
         String topic = args[0];
 
