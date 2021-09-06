@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Simple Transaction Consumer.
+ * Broken Transaction Consumer - demonstrate autocommit false.
  */
-public class TransactionConsumer {
+public class BrokenTransactionConsumer {
+
+    final static Logger log = LoggerFactory.getLogger(BrokenTransactionConsumer.class);
 
     public static void main(String[] args) {
         String topic = args[0];
@@ -22,13 +24,18 @@ public class TransactionConsumer {
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
 
-        // Required for autocommit
-        props.put("group.id", topic);
+        // Required - looks like all the time.
+        props.put("group.id", topic + "-broken");
 
-        // Autocommit is scheduled and not on every read. Keeps it simple.
-        // Alternative is to manually commit the last offset read, or arbitrary offsets.
-        props.put("enable.auto.commit", "true");
-        props.put("auto.commit.interval.ms", "1000");
+        // Autocommit off for finer control.
+        props.put("enable.auto.commit", "false");
+
+        // Equivalent to CLI --from-beginning
+        props.put("auto.offset.reset", "earliest");
+
+        // The default:
+        // props.put("auto.offset.reset", "latest");
+
         props.put("key.deserializer", "io.confluent.kafka.serializers.KafkaAvroDeserializer");
         props.put("value.deserializer", "io.confluent.kafka.serializers.KafkaAvroDeserializer");
         props.put("schema.registry.url", "http://localhost:8081");
@@ -46,6 +53,9 @@ public class TransactionConsumer {
             for (ConsumerRecord<Address, Transaction> record : records) {
                 System.out.println("Consumed: partition: " + record.partition() + ", " + record.offset() +  ", value: " + record.value());
             }
+
+            // Manual commit. But, we fail.
+            // consumer.commitSync();
         }
     }
 }
